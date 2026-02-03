@@ -1,16 +1,6 @@
 -- Database and table creation
 CREATE DATABASE ch_sales;
 
-CREATE TABLE dbo.chocolate_sales
-(
-	Sales_Person VARCHAR (50),
-	Country VARCHAR (20),
-	"Product" VARCHAR(25),
-	"Date" DATE,
-	Amount FLOAT,
-	Boxes_Shipped INT
-);
-
 -- Find null values
 SELECT * FROM dbo.chocolate_sales
 WHERE 
