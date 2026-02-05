@@ -62,4 +62,66 @@ SELECT
     CAST(Amount AS DECIMAL(10,2)) AS Amount,
     SUM(CAST(Amount AS DECIMAL(10,2))) OVER (ORDER BY Date ASC) AS RunningTotal
 FROM dbo.chocolate_sales
-ORDER BY Date DESC;
+ORDER BY Date ASC;
+
+-- Sales where amount is above the average sale amount.
+SELECT
+    Sales_Person,
+    [Product],
+    CAST(Amount AS DECIMAL(10,2)) AS Amount
+FROM dbo.chocolate_sales
+WHERE Amount > (
+    SELECT
+        AVG(Amount)
+    FROM dbo.chocolate_sales )
+ORDER BY Amount DESC;
+
+-- Which month has the highest sales.
+WITH monthly_sales AS (
+    SELECT 
+        FORMAT(DATEFROMPARTS(YEAR([Date]), MONTH([Date]), 1), 'MM-yyyy') AS [Month],
+        CAST(SUM(Amount) AS DECIMAL(10,2)) AS Amount
+    FROM dbo.chocolate_sales
+    GROUP BY 
+        YEAR(Date),
+        MONTH(Date)
+    --ORDER BY 
+    --    YEAR(Date),
+    --    MONTH(Date) 
+    )
+SELECT TOP 1
+    [Month],
+    Amount
+FROM monthly_sales
+ORDER BY Amount;
+  
+-- Calculate percentage contribution of each Product to total sales.
+
+
+-- Find duplicate sales records (same Sales Person, Product, Date).
+  SELECT *
+FROM (
+    SELECT *,
+           ROW_NUMBER() OVER (
+               PARTITION BY Sales_Person, Product, [Date]
+               ORDER BY Amount DESC
+           ) AS rn
+    FROM dbo.chocolate_sales
+) d
+WHERE rn > 1
+ORDER BY 
+    Sales_Person,
+    Product,
+    [Date];
+
+SELECT 
+    Sales_Person,
+    Product,
+    [Date],
+    COUNT(*) AS Duplicate_Count
+FROM dbo.chocolate_sales
+GROUP BY 
+    Sales_Person,
+    Product,
+    [Date]
+HAVING COUNT(*) > 1;
