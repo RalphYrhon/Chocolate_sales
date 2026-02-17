@@ -96,7 +96,16 @@ FROM monthly_sales
 ORDER BY Amount;
   
 -- Calculate percentage contribution of each Product to total sales.
-
+SELECT
+    [Product],
+    SUM(Amount) AS Product_Sales,
+    ROUND(
+        SUM(Amount) * 100.0 / SUM(SUM(Amount)) OVER (),
+        2
+    ) AS Percentage_Contribution
+FROM dbo.chocolate_sales
+GROUP BY [Product]
+ORDER BY Percentage_Contribution DESC;
 
 -- Find duplicate sales records (same Sales Person, Product, Date).
   SELECT *
