@@ -78,7 +78,7 @@ SELECT
     CAST(ROUND(
         (TotalSales - LAG(Totalsales) OVER(PARTITION BY Country ORDER BY YearDate))*100/
         LAG(Totalsales) OVER(PARTITION BY Country ORDER BY YearDate), 2 )
-        AS DECIMAL(10,2) ) AS 'YoY % Growth'
+        AS DECIMAL(10,2) ) AS YoY_Growth_Percent
 FROM YearlySales
 ORDER BY Country, YearDate;    
 

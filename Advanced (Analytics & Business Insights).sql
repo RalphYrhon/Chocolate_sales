@@ -98,7 +98,7 @@ ORDER BY Amount;
 -- Calculate percentage contribution of each Product to total sales.
 SELECT
     [Product],
-    SUM(Amount) AS Product_Sales,
+    CAST(SUM(Amount) AS DECIMAL(10,2)) AS Product_Sales,
     ROUND(
         SUM(Amount) * 100.0 / SUM(SUM(Amount)) OVER (),
         2
