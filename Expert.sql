@@ -82,4 +82,4 @@ SELECT
 FROM YearlySales
 ORDER BY Country, YearDate;    
 
-#sample lang
+-- next Compare Boxes Shipped vs Amount to find inefficient sales.
